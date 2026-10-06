@@ -1,0 +1,442 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #08080d;
+    --card: rgba(255, 255, 255, 0.055);
+    --border: rgba(255, 255, 255, 0.10);
+    --text: #f7f4f7;
+    --muted: #a7a2aa;
+    --accent: #ff5c8a;
+    --accent-soft: rgba(255, 92, 138, 0.14);
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 20% 0%, rgba(255, 92, 138, 0.10), transparent 34%),
+        radial-gradient(circle at 90% 80%, rgba(151, 91, 255, 0.09), transparent 30%),
+        var(--bg);
+    color: var(--text);
+    font-family: "DM Sans", sans-serif;
+    overflow-x: hidden;
+}
+
+.glow {
+    position: fixed;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    opacity: .14;
+}
+
+.glow-one {
+    background: #ff4f84;
+    top: -120px;
+    right: 10%;
+}
+
+.glow-two {
+    background: #865cff;
+    bottom: -120px;
+    left: 5%;
+}
+
+.dashboard {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 48px 0 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.eyebrow,
+.section-label {
+    color: #c3bcc5;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .18em;
+}
+
+h1 {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(38px, 6vw, 66px);
+    line-height: 1;
+    margin: 8px 0 12px;
+}
+
+h1 span {
+    font-family: "DM Sans", sans-serif;
+    font-size: .65em;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.refresh-btn {
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.07);
+    color: var(--text);
+    padding: 12px 18px;
+    border-radius: 14px;
+    cursor: pointer;
+    font: 600 14px "DM Sans", sans-serif;
+    transition: .2s ease;
+    backdrop-filter: blur(16px);
+}
+
+.refresh-btn:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,92,138,.45);
+    background: var(--accent-soft);
+}
+
+.refresh-btn span {
+    font-size: 20px;
+    vertical-align: -2px;
+    margin-right: 5px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.stat-card,
+.latest-card,
+.responses-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 70px rgba(0,0,0,.20);
+}
+
+.stat-card {
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    background: var(--accent-soft);
+    font-size: 21px;
+}
+
+.stat-card p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.stat-card strong {
+    font-size: 21px;
+}
+
+.latest-card {
+    padding: 25px;
+    margin-bottom: 16px;
+}
+
+.latest-content {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 17px;
+}
+
+.heart-orb {
+    width: 62px;
+    height: 62px;
+    flex: 0 0 62px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    border: 1px solid rgba(255,92,138,.25);
+    color: var(--accent);
+    font-size: 25px;
+    box-shadow: 0 0 35px rgba(255,92,138,.12);
+}
+
+.latest-content h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 27px;
+    margin-bottom: 5px;
+}
+
+.latest-content p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.responses-card {
+    padding: 25px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.section-heading h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 28px;
+    margin-top: 5px;
+}
+
+.live-badge {
+    border: 1px solid rgba(87, 230, 147, .20);
+    background: rgba(87, 230, 147, .08);
+    color: #a9f4c5;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.live-badge i {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #61e995;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: 1px;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 12px;
+    min-height: 18px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th {
+    text-align: left;
+    color: #aaa4ad;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 15px 17px;
+    background: rgba(255,255,255,.035);
+}
+
+td {
+    padding: 17px;
+    border-top: 1px solid rgba(255,255,255,.07);
+    font-size: 14px;
+}
+
+td:first-child {
+    font-weight: 700;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 45px 20px 30px;
+    color: var(--muted);
+}
+
+.empty-state div {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.empty-state h3 {
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.empty-state p {
+    font-size: 13px;
+}
+
+.error {
+    color: #ff9eae;
+}
+
+footer {
+    text-align: center;
+    color: #6e6971;
+    font-size: 12px;
+    padding: 24px 0 5px;
+}
+
+footer span {
+    color: var(--accent);
+}
+
+@media (max-width: 720px) {
+    .dashboard {
+        width: min(100% - 22px, 1180px);
+        padding-top: 28px;
+    }
+
+    .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .refresh-btn {
+        width: 100%;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .latest-card,
+    .responses-card {
+        padding: 19px;
+        border-radius: 20px;
+    }
+
+    .latest-content h2 {
+        font-size: 23px;
+    }
+}
+
+
+/* ========================================
+   PASSWORD SCREEN
+   ======================================== */
+
+.login-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 22px;
+    position: relative;
+    z-index: 5;
+}
+
+.login-card {
+    width: min(420px, 100%);
+    text-align: center;
+    padding: 38px 30px;
+    background: rgba(255,255,255,.055);
+    border: 1px solid rgba(255,255,255,.11);
+    border-radius: 28px;
+    backdrop-filter: blur(24px);
+    box-shadow: 0 30px 100px rgba(0,0,0,.45);
+}
+
+.login-heart {
+    width: 66px;
+    height: 66px;
+    margin: 0 auto 20px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #ff5c8a;
+    background: rgba(255,92,138,.13);
+    border: 1px solid rgba(255,92,138,.25);
+    font-size: 27px;
+}
+
+.login-label {
+    color: #c3bcc5;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .2em;
+}
+
+.login-card h1 {
+    margin: 9px 0 9px;
+    font-family: "Playfair Display", serif;
+    font-size: 43px;
+}
+
+.login-card h1 span {
+    font-family: "DM Sans", sans-serif;
+    font-size: .6em;
+}
+
+.login-card p {
+    color: #a7a2aa;
+    font-size: 14px;
+    margin-bottom: 22px;
+}
+
+.login-card form {
+    display: grid;
+    gap: 11px;
+}
+
+.login-card input {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,.12);
+    outline: none;
+    background: rgba(0,0,0,.28);
+    color: #f7f4f7;
+    border-radius: 14px;
+    padding: 14px 15px;
+    font: 15px "DM Sans", sans-serif;
+    text-align: center;
+}
+
+.login-card input:focus {
+    border-color: rgba(255,92,138,.55);
+    box-shadow: 0 0 0 4px rgba(255,92,138,.08);
+}
+
+.login-card button {
+    border: 0;
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(135deg, #ff5c8a, #d83e70);
+    font: 700 14px "DM Sans", sans-serif;
+    transition: .2s ease;
+}
+
+.login-card button:hover {
+    transform: translateY(-2px);
+}
+
+#loginError {
+    min-height: 18px;
+    color: #ff9eae;
+    font-size: 12px;
+    margin-top: 3px;
+}

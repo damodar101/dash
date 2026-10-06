@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Date Dashboard ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+
+    <main class="dashboard">
+        <header class="topbar">
+            <div>
+                <div class="eyebrow">PRIVATE DATE DASHBOARD</div>
+                <h1>Our Date <span>❤️</span></h1>
+                <p class="subtitle">See the date choice whenever it is submitted.</p>
+            </div>
+            <button class="refresh-btn" id="refreshBtn" onclick="loadResponses()">
+                <span>↻</span> Refresh
+            </button>
+        </header>
+
+        <section class="stats">
+            <article class="stat-card">
+                <div class="stat-icon">💌</div>
+                <div>
+                    <p>Total responses</p>
+                    <strong id="totalResponses">—</strong>
+                </div>
+            </article>
+            <article class="stat-card">
+                <div class="stat-icon">💕</div>
+                <div>
+                    <p>Latest activity</p>
+                    <strong id="latestActivity">—</strong>
+                </div>
+            </article>
+            <article class="stat-card">
+                <div class="stat-icon">⏰</div>
+                <div>
+                    <p>Latest time</p>
+                    <strong id="latestTime">—</strong>
+                </div>
+            </article>
+        </section>
+
+        <section class="latest-card" id="latestCard">
+            <div class="section-label">LATEST CHOICE</div>
+            <div class="latest-content">
+                <div class="heart-orb">♥</div>
+                <div>
+                    <h2 id="latestTitle">Waiting for a response...</h2>
+                    <p id="latestDetails">When a date is chosen, it will appear here.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="responses-card">
+            <div class="section-heading">
+                <div>
+                    <div class="section-label">RESPONSE HISTORY</div>
+                    <h2>All date choices</h2>
+                </div>
+                <span class="live-badge"><i></i> Live</span>
+            </div>
+
+            <div id="status" class="status">Loading responses...</div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Activity</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Submitted</th>
+                        </tr>
+                    </thead>
+                    <tbody id="responsesBody"></tbody>
+                </table>
+            </div>
+
+            <div id="emptyState" class="empty-state" hidden>
+                <div>💗</div>
+                <h3>No date response yet</h3>
+                <p>When the website is submitted, the choice will appear here.</p>
+            </div>
+        </section>
+
+        <footer>
+            Made for one special date <span>♥</span>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>
