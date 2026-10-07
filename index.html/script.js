@@ -1,9 +1,18 @@
 // ========================================
-// SIMPLE DASHBOARD PASSWORD
+// OUR DATE DASHBOARD - MOBILE FIX
 // ========================================
 
 const DASHBOARD_PASSWORD = "Forever2026";
 const DASHBOARD_AUTH_KEY = "dateDashboardUnlocked";
+
+const SUPABASE_URL = "https://gysuspjdcogxedetcjnl.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_p9a_Z3oe4clvu2O-LZjmBA_IeHi7BfQ";
+
+let supabaseClient = null;
+
+// ========================================
+// PASSWORD SCREEN
+// ========================================
 
 function showDashboardLogin() {
     document.body.innerHTML = `
@@ -22,6 +31,7 @@ function showDashboardLogin() {
                         autocomplete="off"
                         autofocus
                     >
+
                     <button type="submit">Unlock ❤️</button>
                     <div id="loginError"></div>
                 </form>
@@ -29,7 +39,9 @@ function showDashboardLogin() {
         </div>
     `;
 
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
+    const form = document.getElementById("loginForm");
+
+    form.addEventListener("submit", function (event) {
         event.preventDefault();
 
         const entered = document.getElementById("dashboardPassword").value;
@@ -47,36 +59,33 @@ function showDashboardLogin() {
 }
 
 function checkDashboardPassword() {
-    if (sessionStorage.getItem(DASHBOARD_AUTH_KEY) === "true") {
-        return true;
-    }
-
-    showDashboardLogin();
-    return false;
+    return sessionStorage.getItem(DASHBOARD_AUTH_KEY) === "true";
 }
 
-if (!checkDashboardPassword()) {
-    // The login screen is already displayed.
-} else {
 // ========================================
-// OUR DATE DASHBOARD
+// SUPABASE
 // ========================================
-
-const SUPABASE_URL = "https://gysuspjdcogxedetcjnl.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_p9a_Z3oe4clvu2O-LZjmBA_IeHi7BfQ";
-
-let supabaseClient = null;
 
 function initSupabase() {
     if (!window.supabase) {
-        throw new Error("Supabase library did not load.");
+        throw new Error(
+            "Supabase library did not load. Please check your internet connection."
+        );
     }
 
-    supabaseClient = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    );
+    if (!supabaseClient) {
+        supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+        );
+    }
+
+    return supabaseClient;
 }
+
+// ========================================
+// FORMATTING
+// ========================================
 
 function formatDate(value) {
     if (!value) return "—";
@@ -112,8 +121,15 @@ function formatSubmitted(value) {
     });
 }
 
+// ========================================
+// UI
+// ========================================
+
 function setStatus(message, isError = false) {
     const status = document.getElementById("status");
+
+    if (!status) return;
+
     status.textContent = message;
     status.classList.toggle("error", isError);
 }
@@ -124,6 +140,7 @@ function setLoading(loading) {
     if (!button) return;
 
     button.disabled = loading;
+
     button.innerHTML = loading
         ? "<span>↻</span> Loading..."
         : "<span>↻</span> Refresh";
@@ -132,6 +149,8 @@ function setLoading(loading) {
 function renderResponses(rows) {
     const body = document.getElementById("responsesBody");
     const emptyState = document.getElementById("emptyState");
+
+    if (!body || !emptyState) return;
 
     body.innerHTML = "";
 
@@ -142,7 +161,7 @@ function renderResponses(rows) {
 
     emptyState.hidden = true;
 
-    rows.forEach(row => {
+    rows.forEach(function (row) {
         const tr = document.createElement("tr");
 
         const activity = document.createElement("td");
@@ -162,7 +181,7 @@ function renderResponses(rows) {
     });
 }
 
-function renderLatest(row) {
+function renderLatest(row, total) {
     const latestActivity = document.getElementById("latestActivity");
     const latestTime = document.getElementById("latestTime");
     const totalResponses = document.getElementById("totalResponses");
@@ -170,7 +189,7 @@ function renderLatest(row) {
     const latestDetails = document.getElementById("latestDetails");
 
     if (!row) {
-        totalResponses.textContent = "0";
+        totalResponses.textContent = String(total || 0);
         latestActivity.textContent = "—";
         latestTime.textContent = "—";
         latestTitle.textContent = "Waiting for a response...";
@@ -179,49 +198,57 @@ function renderLatest(row) {
         return;
     }
 
+    totalResponses.textContent = String(total);
     latestActivity.textContent = row.activity || "—";
     latestTime.textContent = row.selected_time || "—";
-    latestTitle.textContent = row.activity || "A date was chosen ❤️";
+
+    latestTitle.textContent =
+        row.activity || "A date was chosen ❤️";
 
     latestDetails.textContent =
         `${formatDate(row.selected_date)} • ${row.selected_time || "Time not selected"} • Submitted ${formatSubmitted(row.submitted_at)}`;
 }
+
+// ========================================
+// LOAD RESPONSES
+// ========================================
 
 async function loadResponses() {
     setLoading(true);
     setStatus("Loading responses...");
 
     try {
-        if (!supabaseClient) {
-            initSupabase();
-        }
+        const client = initSupabase();
 
-        const { data, error } = await supabaseClient
+        const result = await client
             .from("date_responses")
             .select("id, activity, selected_date, selected_time, submitted_at")
             .order("submitted_at", { ascending: false });
 
-        if (error) {
-            console.error("Supabase dashboard error:", error);
-            throw error;
+        if (result.error) {
+            console.error("Supabase dashboard error:", result.error);
+            throw result.error;
         }
 
-        const rows = data || [];
+        const rows = result.data || [];
 
-        document.getElementById("totalResponses").textContent = rows.length;
         renderResponses(rows);
-        renderLatest(rows[0] || null);
+        renderLatest(rows[0] || null, rows.length);
 
         setStatus(
             rows.length
                 ? `Last updated ${formatSubmitted(new Date().toISOString())}`
                 : "No responses yet."
         );
-    } catch (error) {
-        console.error(error);
 
-        document.getElementById("responsesBody").innerHTML = "";
-        document.getElementById("emptyState").hidden = true;
+    } catch (error) {
+        console.error("Dashboard error:", error);
+
+        const body = document.getElementById("responsesBody");
+        const emptyState = document.getElementById("emptyState");
+
+        if (body) body.innerHTML = "";
+        if (emptyState) emptyState.hidden = true;
 
         setStatus(
             `Could not load responses: ${error.message || "Unknown error"}`,
@@ -232,11 +259,24 @@ async function loadResponses() {
     }
 }
 
-window.addEventListener("DOMContentLoaded", () => {
+// IMPORTANT:
+// Make the function global so the HTML Refresh button works
+// on Safari/iPhone as well as desktop browsers.
+window.loadResponses = loadResponses;
+
+// ========================================
+// START DASHBOARD
+// ========================================
+
+function startDashboard() {
     loadResponses();
 
-    // Check for a new response every 30 seconds.
+    // Refresh every 30 seconds.
     setInterval(loadResponses, 30000);
-});
+}
 
+if (!checkDashboardPassword()) {
+    showDashboardLogin();
+} else {
+    window.addEventListener("DOMContentLoaded", startDashboard);
 }
