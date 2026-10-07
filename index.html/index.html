@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Date Dashboard ❤️</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
     <div class="glow glow-one"></div>
@@ -20,7 +22,8 @@
                 <h1>Our Date <span>❤️</span></h1>
                 <p class="subtitle">See the date choice whenever it is submitted.</p>
             </div>
-            <button class="refresh-btn" id="refreshBtn" onclick="loadResponses()">
+
+            <button class="refresh-btn" id="refreshBtn" onclick="window.loadResponses()">
                 <span>↻</span> Refresh
             </button>
         </header>
@@ -33,6 +36,7 @@
                     <strong id="totalResponses">—</strong>
                 </div>
             </article>
+
             <article class="stat-card">
                 <div class="stat-icon">💕</div>
                 <div>
@@ -40,6 +44,7 @@
                     <strong id="latestActivity">—</strong>
                 </div>
             </article>
+
             <article class="stat-card">
                 <div class="stat-icon">⏰</div>
                 <div>
@@ -51,8 +56,10 @@
 
         <section class="latest-card" id="latestCard">
             <div class="section-label">LATEST CHOICE</div>
+
             <div class="latest-content">
                 <div class="heart-orb">♥</div>
+
                 <div>
                     <h2 id="latestTitle">Waiting for a response...</h2>
                     <p id="latestDetails">When a date is chosen, it will appear here.</p>
@@ -66,6 +73,7 @@
                     <div class="section-label">RESPONSE HISTORY</div>
                     <h2>All date choices</h2>
                 </div>
+
                 <span class="live-badge"><i></i> Live</span>
             </div>
 
@@ -97,7 +105,10 @@
         </footer>
     </main>
 
+    <!-- Supabase must load BEFORE script.js -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js"></script>
+
+    <!-- Version number forces phones to load the newest JS -->
+    <script src="script.js?v=3"></script>
 </body>
 </html>
